@@ -15,14 +15,9 @@ namespace TimeSheetHelperConsoleApp
 	{
 		static void Main(string[] args)
 		{
-			if (args.Count() == 0)
+			if (args.Count() != 2)
 			{
 				return;
-			}
-
-			if(args.Count() == 3)
-			{
-				DateTimeNow.SetMistiming(Convert.ToInt32(args[2]) * -1);
 			}
 
 			Thread.GetDomain().UnhandledException += new UnhandledExceptionEventHandler(ConsoleMain_UnhandledException);
