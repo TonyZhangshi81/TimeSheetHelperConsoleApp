@@ -11,7 +11,7 @@ namespace TimeSheetHelperConsoleApp.Util
 	/// </summary>
 	public class DateTimeNow
 	{
-		private readonly DateTime _dateTime;
+		private DateTime _dateTime;
 		/// <summary>
 		/// Define a static variable to hold the instance of the class
 		/// </summary>
@@ -28,6 +28,15 @@ namespace TimeSheetHelperConsoleApp.Util
 		private DateTimeNow()
 		{
 			_dateTime = DateTime.Now;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="minutes"></param>
+		public static void SetMistiming(int minutes)
+		{
+			SetDateTime(Instance._dateTime.AddMinutes(minutes));
 		}
 
 		/// <summary>
@@ -58,6 +67,11 @@ namespace TimeSheetHelperConsoleApp.Util
 		public static DateTime GetDateTime()
 		{
 			return instance._dateTime;
+		}
+
+		static void SetDateTime(DateTime dateTime)
+		{
+			instance._dateTime = dateTime;
 		}
 	}
 }
