@@ -22,7 +22,7 @@ namespace TimeSheetHelperConsoleApp
 
 			if(args.Count() == 3)
 			{
-				DateTimeNow.SetMistiming(Convert.ToInt32(args[2]) * -1);
+				DateTimeNow.SetMistiming(args[2]);
 			}
 
 			Thread.GetDomain().UnhandledException += new UnhandledExceptionEventHandler(ConsoleMain_UnhandledException);

@@ -33,10 +33,14 @@ namespace TimeSheetHelperConsoleApp.Util
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="minutes"></param>
-		public static void SetMistiming(int minutes)
+		/// <param name="dateTime"></param>
+		public static void SetMistiming(string dateTime)
 		{
-			SetDateTime(Instance._dateTime.AddMinutes(minutes));
+			DateTime newDateTime;
+			if (DateTime.TryParse(dateTime, out newDateTime))
+			{
+				SetDateTime(newDateTime);
+			}
 		}
 
 		/// <summary>
