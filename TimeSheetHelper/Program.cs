@@ -1,67 +1,87 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using TimeSheetHelperConsoleApp.Ext;
 using TimeSheetHelperConsoleApp.Util;
 using TimeSheetHelperConsoleApp.WorkProcess;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace TimeSheetHelperConsoleApp
 {
+    /// <summary>
+    /// 
+    /// </summary>
 	public class Program
-	{
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args">
+        /// [0] -> (0:ClockIn or 1:ClockOut)
+        /// [1] -> (Time: 15:26:11)
+        /// </param>
 		static void Main(string[] args)
-		{
-			if (args.Count() == 0)
-			{
-				return;
-			}
+        {
+            if (args.Count() == 0)
+            {
+                return;
+            }
 
-			if(args.Count() == 3)
-			{
-				DateTimeNow.SetMistiming(args[2]);
-			}
+            Thread.GetDomain().UnhandledException += new UnhandledExceptionEventHandler(ConsoleMain_UnhandledException);
 
-			Thread.GetDomain().UnhandledException += new UnhandledExceptionEventHandler(ConsoleMain_UnhandledException);
+            var setting = Configuration.Get<SettingConfig>("ParamArg");
 
-			// 
-			string fileName = args[0];
-			// check on work attendance
-			AttendanceManagement.Switch inOut = (AttendanceManagement.Switch)Enum.ToObject(typeof(AttendanceManagement.Switch), Convert.ToInt32(args[1]));
+            if (args.Count() == 2)
+            {
+                DateTimeNow.SetMistiming(args[1]);
+            }
 
-			using (SpireXls xls = new SpireXls())
-			{
-				xls.Load(fileName);
+            using (SpireXls xls = new SpireXls())
+            {
+                var file = GetNewFileName();
+                if (!File.Exists(file)) {
+                    File.Copy(System.Configuration.ConfigurationManager.AppSettings.Get("Template"), file);
+                }
 
-				AttendanceManagement att = new AttendanceManagement(xls, inOut);
-				att.Attendance();
+                xls.Load(file);
 
-				xls.Save();
-			}
+                AttendanceManagement att = new AttendanceManagement(xls, setting, (AttendanceManagement.Switch)Enum.ToObject(typeof(AttendanceManagement.Switch), Convert.ToInt32(args[0])));
+                att.Attendance();
 
-			Console.WriteLine(DateTimeNow.GetTime());
-			Console.ReadKey();
-		}
+                xls.Save();
+            }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		static private void ConsoleMain_UnhandledException(object sender, System.UnhandledExceptionEventArgs e)
-		{
-			try
-			{
-				Exception ex = (Exception)e.ExceptionObject;
-				Console.WriteLine(ex.Message);
-			}
-			finally
-			{
-				Console.ReadKey();
-			}
-		}
-	}
+            Console.WriteLine(DateTimeNow.GetTime());
+            Console.ReadKey();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        static private string GetNewFileName()
+        {
+            return string.Format("{0}TimeSheet_zhangcg_{1}.xls",
+                System.Configuration.ConfigurationManager.AppSettings.Get("WorkSheet"),
+                DateTimeNow.GetBeginDayofWeek().ToString("yyyyMMdd").Substring(4, 4));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        static private void ConsoleMain_UnhandledException(object sender, System.UnhandledExceptionEventArgs e)
+        {
+            try
+            {
+                Exception ex = (Exception)e.ExceptionObject;
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                Console.ReadKey();
+            }
+        }
+    }
 }

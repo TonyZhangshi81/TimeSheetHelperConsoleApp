@@ -84,7 +84,7 @@
     <Compile Include="WorkProcess\AttendanceManagement.cs" />
     <Compile Include="Ext\ISpireExt.cs" />
     <Compile Include="Ext\SpireXls.cs" />
-    <Compile Include="Ext\XlsConfig.cs" />
+    <Compile Include="Ext\SettingConfig.cs" />
     <Compile Include="WorkProcess\AttendanceManagement.Switch.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -92,7 +92,7 @@
     <None Include="nuget.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Setting\xls.json" />
+    <None Include="Setting\setting.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
