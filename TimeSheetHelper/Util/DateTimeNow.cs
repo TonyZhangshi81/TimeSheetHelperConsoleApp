@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace TimeSheetHelperConsoleApp.Util
 {
@@ -23,7 +24,7 @@ namespace TimeSheetHelperConsoleApp.Util
         /// </summary>
         private DateTimeNow()
         {
-            _dateTime = DateTime.Now.AddMinutes(-3);
+            _dateTime = DateTime.Now.AddMinutes(Convert.ToInt16(System.Configuration.ConfigurationManager.AppSettings.Get("Threshold")));
         }
 
         /// <summary>
@@ -33,9 +34,20 @@ namespace TimeSheetHelperConsoleApp.Util
         public static void SetMistiming(string dateTime)
         {
             DateTime newDateTime;
-            if (DateTime.TryParse(string.Format("2001/01/01 {0}", dateTime), out newDateTime))
+
+            if (dateTime.Length == 14)
             {
-                SetDateTime(newDateTime);
+                if (DateTime.TryParseExact(dateTime, "yyyyMMddHHmmss", new CultureInfo("zh-CN", true), DateTimeStyles.None, out newDateTime))
+                {
+                    SetDateTime(newDateTime);
+                }
+            }
+            else if(dateTime.Length == 6)
+            {
+                if (DateTime.TryParseExact(dateTime, "HHmmss", new CultureInfo("zh-CN", true), DateTimeStyles.None, out newDateTime))
+                {
+                    SetDateTime(newDateTime);
+                }
             }
         }
 
@@ -45,7 +57,8 @@ namespace TimeSheetHelperConsoleApp.Util
         /// <returns></returns>
         public static DateTime GetBeginDayofWeek()
         {
-            return DateTime.Now.AddDays((int)DateTimeNow.GetDateTime().DayOfWeek * -1 + 1);
+            var dayIndex = (int)DateTimeNow.GetDateTime().DayOfWeek;
+            return instance._dateTime.AddDays((dayIndex - 1) * -1);
         }
 
         /// <summary>
