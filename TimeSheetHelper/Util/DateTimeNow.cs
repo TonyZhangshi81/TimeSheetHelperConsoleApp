@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using TimeSheetHelperConsoleApp.WorkProcess;
 
 namespace TimeSheetHelperConsoleApp.Util
 {
@@ -20,11 +21,16 @@ namespace TimeSheetHelperConsoleApp.Util
         private static readonly object locker = new object();
 
         /// <summary>
+        /// 
+        /// </summary>
+        private bool _inputDateTime = false;
+
+        /// <summary>
         /// Definition private constructor, so that the outside world cannot create the class instance
         /// </summary>
         private DateTimeNow()
         {
-            _dateTime = DateTime.Now.AddMinutes(Convert.ToInt16(System.Configuration.ConfigurationManager.AppSettings.Get("Threshold")));
+            _dateTime = DateTime.Now;
         }
 
         /// <summary>
@@ -77,9 +83,27 @@ namespace TimeSheetHelperConsoleApp.Util
         /// 
         /// </summary>
         /// <returns></returns>
-        public static string GetTime()
+        public static string GetTime(AttendanceManagement.Switch inOut)
         {
-            return instance._dateTime.ToString("HH:mm:ss");
+            return GetTime(inOut, 0);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="threshold"></param>
+        /// <returns></returns>
+        public static string GetTime(AttendanceManagement.Switch inOut, int threshold)
+        {
+            if (instance._inputDateTime)
+            {
+                return instance._dateTime.ToString("HH:mm:ss");
+            }
+
+            var inThreshold = Convert.ToInt16(System.Configuration.ConfigurationManager.AppSettings.Get("InThreshold"));
+            var outThreshold = Convert.ToInt16(System.Configuration.ConfigurationManager.AppSettings.Get("OutThreshold"));
+
+            return instance._dateTime.AddMinutes((inOut == AttendanceManagement.Switch.ClockIn) ? inThreshold : outThreshold).ToString("HH:mm:ss");
         }
 
         /// <summary>
@@ -93,6 +117,7 @@ namespace TimeSheetHelperConsoleApp.Util
 
         static void SetDateTime(DateTime dateTime)
         {
+            instance._inputDateTime = true;
             instance._dateTime = dateTime;
         }
     }

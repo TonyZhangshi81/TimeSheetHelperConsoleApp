@@ -19,5 +19,14 @@
             /// </summary>
             ClockOut
         }
+
+        /// <summary>
+        /// C
+        /// </summary>
+        private const string COL_NAME_CLOCKIN = "C";
+        /// <summary>
+        /// D
+        /// </summary>
+        private const string COL_NAME_CLOCKOUT = "D";
     }
 }

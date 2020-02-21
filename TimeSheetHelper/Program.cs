@@ -31,6 +31,8 @@ namespace TimeSheetHelperConsoleApp
 
             var setting = Configuration.Get<SettingConfig>("ParamArg");
 
+            var inOut = (AttendanceManagement.Switch)Enum.ToObject(typeof(AttendanceManagement.Switch), Convert.ToInt16(args[0]));
+
             if (args.Count() == 2)
             {
                 DateTimeNow.SetMistiming(args[1]);
@@ -45,13 +47,13 @@ namespace TimeSheetHelperConsoleApp
 
                 xls.Load(file);
 
-                AttendanceManagement att = new AttendanceManagement(xls, setting, (AttendanceManagement.Switch)Enum.ToObject(typeof(AttendanceManagement.Switch), Convert.ToInt32(args[0])));
+                AttendanceManagement att = new AttendanceManagement(xls, setting, inOut);
                 att.Attendance();
 
                 xls.Save();
             }
 
-            Console.WriteLine(DateTimeNow.GetTime());
+            Console.WriteLine(DateTimeNow.GetTime(inOut));
             Console.ReadKey();
         }
 

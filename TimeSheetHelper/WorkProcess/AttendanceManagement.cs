@@ -12,15 +12,6 @@ namespace TimeSheetHelperConsoleApp.WorkProcess
         /// <summary>
         /// 
         /// </summary>
-        private const string COL_NAME_CLOCKIN = "C";
-        /// <summary>
-        /// 
-        /// </summary>
-        private const string COL_NAME_CLOCKOUT = "D";
-
-        /// <summary>
-        /// 
-        /// </summary>
         private SpireXls _xls { get; set; }
         /// <summary>
         /// 
@@ -54,16 +45,14 @@ namespace TimeSheetHelperConsoleApp.WorkProcess
         {
             _xls.SetRangeText("PJ1", _config.Content.Id);
             _xls.SetRangeText("L4", _config.Content.Leader);
+
+            _xls.SetRangeText("D7", DateTimeNow.GetBeginDayofWeek().ToString("yyyy/MM/dd"));
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public void Attendance()
-        {
-            _xls.SetRangeText(string.Format("{0}{1}", GetHeadColName(), DayOfWeekToRowIndex()), DateTimeNow.GetTime());
-            _xls.SetRangeText("D7", DateTimeNow.GetBeginDayofWeek().ToString("yyyy/MM/dd"));
-        }
+        public void Attendance() => _xls.SetRangeText(string.Format("{0}{1}", GetHeadColName(), DayOfWeekToRowIndex()), DateTimeNow.GetTime(_inOut));
 
         /// <summary>
         /// 
