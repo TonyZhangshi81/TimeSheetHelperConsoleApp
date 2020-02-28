@@ -52,7 +52,16 @@ namespace TimeSheetHelperConsoleApp.WorkProcess
         /// <summary>
         /// 
         /// </summary>
-        public void Attendance() => _xls.SetRangeText(string.Format("{0}{1}", GetHeadColName(), DayOfWeekToRowIndex()), DateTimeNow.GetTime(_inOut));
+        public void Attendance()
+        {
+            if (_inOut == Switch.Rest)
+            {
+                _xls.SetRangeText(string.Format("{0}{1}", COL_NAME_CLOCKIN, DayOfWeekToRowIndex()), string.Empty);
+                _xls.SetRangeText(string.Format("{0}{1}", COL_NAME_CLOCKOUT, DayOfWeekToRowIndex()), string.Empty);
+                return;
+            }
+            _xls.SetRangeText(string.Format("{0}{1}", GetHeadColName(), DayOfWeekToRowIndex()), DateTimeNow.GetTime(_inOut));
+        }
 
         /// <summary>
         /// 

@@ -17,7 +17,11 @@
             /// <summary>
             /// 
             /// </summary>
-            ClockOut
+            ClockOut,
+            /// <summary>
+            /// 
+            /// </summary>
+            Rest
         }
 
         /// <summary>

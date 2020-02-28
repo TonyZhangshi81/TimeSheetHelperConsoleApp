@@ -39,7 +39,7 @@ namespace TimeSheetHelperConsoleApp.Util
         /// <param name="dateTime"></param>
         public static void SetMistiming(string dateTime)
         {
-            DateTime newDateTime;
+            DateTime newDateTime = DateTime.Now;
 
             if (dateTime.Length == 14)
             {
@@ -48,7 +48,14 @@ namespace TimeSheetHelperConsoleApp.Util
                     SetDateTime(newDateTime);
                 }
             }
-            else if(dateTime.Length == 6)
+            else if (dateTime.Length == 8)
+            {
+                if (DateTime.TryParseExact(dateTime, "yyyyMMdd", new CultureInfo("zh-CN", true), DateTimeStyles.None, out newDateTime))
+                {
+                    SetDateTime(newDateTime);
+                }
+            }
+            else if (dateTime.Length == 6)
             {
                 if (DateTime.TryParseExact(dateTime, "HHmmss", new CultureInfo("zh-CN", true), DateTimeStyles.None, out newDateTime))
                 {
