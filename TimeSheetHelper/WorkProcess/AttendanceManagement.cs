@@ -26,14 +26,21 @@ namespace TimeSheetHelperConsoleApp.WorkProcess
         /// <summary>
         /// 
         /// </summary>
+        private bool _isNewFile { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="xls"></param>
-        /// <param name="contect"></param>
+        /// <param name="config"></param>
         /// <param name="inOut"></param>
-        public AttendanceManagement(SpireXls xls, SettingConfig config, Switch inOut)
+        /// <param name="isNewFile"></param>
+        public AttendanceManagement(SpireXls xls, SettingConfig config, Switch inOut, bool isNewFile = false)
         {
             _xls = xls;
             _config = config;
             _inOut = inOut;
+            _isNewFile = isNewFile;
 
             CommonSetting();
         }
@@ -43,10 +50,17 @@ namespace TimeSheetHelperConsoleApp.WorkProcess
         /// </summary>
         private void CommonSetting()
         {
-            _xls.SetRangeText("PJ1", _config.Content.Id);
-            _xls.SetRangeText("L4", _config.Content.Leader);
+            if (_isNewFile)
+            {
+                _xls.SetRangeText("PJ1", _config.Content.Id);
+                _xls.SetRangeText("L4", _config.Content.Leader);
 
-            _xls.SetRangeText("D7", DateTimeNow.GetBeginDayofWeek().ToString("yyyy/MM/dd"));
+                _xls.SetRangeText("D5", _config.Content.JobNumber);
+                _xls.SetRangeText("D6", _config.Content.Name);
+                _xls.SetRangeText("D8", _config.Content.Seat);
+
+                _xls.SetRangeText("D7", DateTimeNow.GetBeginDayofWeek().ToString("yyyy/MM/dd"));
+            }
         }
 
         /// <summary>
@@ -60,7 +74,7 @@ namespace TimeSheetHelperConsoleApp.WorkProcess
                 _xls.SetRangeText(string.Format("{0}{1}", COL_NAME_CLOCKOUT, DayOfWeekToRowIndex()), string.Empty);
                 return;
             }
-            _xls.SetRangeText(string.Format("{0}{1}", GetHeadColName(), DayOfWeekToRowIndex()), DateTimeNow.GetTime(_inOut));
+            _xls.SetRangeText(string.Format("{0}{1}", GetHeadColName(), DayOfWeekToRowIndex()), DateTimeNow.GetTime(_inOut, _config.Hold.In, _config.Hold.Out));
         }
 
         /// <summary>

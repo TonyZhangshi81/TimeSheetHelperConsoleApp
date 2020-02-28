@@ -40,14 +40,16 @@ namespace TimeSheetHelperConsoleApp
 
             using (SpireXls xls = new SpireXls())
             {
+                var isNewFile = false;
                 var file = GetNewFileName();
                 if (!File.Exists(file)) {
+                    isNewFile = true;
                     File.Copy(System.Configuration.ConfigurationManager.AppSettings.Get("Template"), file);
                 }
 
                 xls.Load(file);
 
-                AttendanceManagement att = new AttendanceManagement(xls, setting, inOut);
+                AttendanceManagement att = new AttendanceManagement(xls, setting, inOut, isNewFile);
                 att.Attendance();
 
                 xls.Save();

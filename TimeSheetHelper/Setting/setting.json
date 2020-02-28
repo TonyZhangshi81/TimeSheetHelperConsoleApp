@@ -1,6 +1,13 @@
 ﻿{
+  "threshold": {
+    "in": -5,
+    "out": 3
+  },
   "content": {
+    "jobNumber": "H2004XXXX",
+    "name": "XXXXXX1",
+    "seat": "5L49",
     "id": "18-2-0XX-0XX",
-    "leader": "XXXXXX"
+    "leader": "XXXXXX2"
   }
 }
