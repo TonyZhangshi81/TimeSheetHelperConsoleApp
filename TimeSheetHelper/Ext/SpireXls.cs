@@ -1,7 +1,7 @@
 ﻿using Spire.Xls;
 using System;
 
-namespace TimeSheetHelperConsoleApp.Ext
+namespace TimeSheetHelperConsoleApp.Setting
 {
     /// <summary>
     /// Excel read simple processing

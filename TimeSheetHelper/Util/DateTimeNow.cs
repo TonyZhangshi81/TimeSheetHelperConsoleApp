@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using TimeSheetHelperConsoleApp.WorkProcess;
 
 namespace TimeSheetHelperConsoleApp.Util
 {
@@ -25,7 +24,14 @@ namespace TimeSheetHelperConsoleApp.Util
         /// <summary>
         /// 
         /// </summary>
-        private bool _inputDateTime = false;
+        /// <returns></returns>
+        public static string Time => Instance._dateTime.ToString("HH:mm:ss");
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static DateTime DateTime => Instance._dateTime;
 
         /// <summary>
         /// Definition private constructor, so that the outside world cannot create the class instance
@@ -39,31 +45,60 @@ namespace TimeSheetHelperConsoleApp.Util
         /// 
         /// </summary>
         /// <param name="dateTime"></param>
-        public static void SetMistiming(string dateTime)
+        public static bool SetMistiming(string dateTime)
         {
             DateTime sysDateTime = DateTime.Now;
+            if (string.IsNullOrEmpty(dateTime))
+            {
+                Instance._dateTime = sysDateTime;
+                return true;
+            }
 
             if (dateTime.Length == 14)
             {
-                if (DateTime.TryParseExact(dateTime, "yyyyMMddHHmmss", new CultureInfo("zh-CN", true), DateTimeStyles.None, out sysDateTime))
+                if (!DateTime.TryParseExact(dateTime, "yyyyMMddHHmmss", new CultureInfo("zh-CN", true), DateTimeStyles.None, out sysDateTime))
                 {
-                    SetDateTime(sysDateTime);
+                    return false;
                 }
             }
             else if (dateTime.Length == 8)
             {
-                if (DateTime.TryParseExact(dateTime, "yyyyMMdd", new CultureInfo("zh-CN", true), DateTimeStyles.None, out sysDateTime))
+                if (!DateTime.TryParseExact(dateTime, "yyyyMMdd", new CultureInfo("zh-CN", true), DateTimeStyles.None, out sysDateTime))
                 {
-                    SetDateTime(sysDateTime);
+                    return false;
                 }
             }
             else if (dateTime.Length == 6)
             {
-                if (DateTime.TryParseExact(dateTime, "HHmmss", new CultureInfo("zh-CN", true), DateTimeStyles.None, out sysDateTime))
+                if (!DateTime.TryParseExact(dateTime, "HHmmss", new CultureInfo("zh-CN", true), DateTimeStyles.None, out sysDateTime))
                 {
-                    SetDateTime(sysDateTime);
+                    return false;
                 }
             }
+            else
+            {
+                return false;
+            }
+
+            Instance._dateTime = sysDateTime;
+
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="threshold"></param>
+        /// <returns></returns>
+        public static bool SetMistiming(int threshold)
+        {
+            if (!SetMistiming(string.Empty))
+            {
+                return false;
+            }
+
+            Instance._dateTime = Instance._dateTime.AddMinutes(threshold);
+            return true;
         }
 
         /// <summary>
@@ -72,50 +107,8 @@ namespace TimeSheetHelperConsoleApp.Util
         /// <returns></returns>
         public static DateTime GetBeginDayofWeek()
         {
-            var dayIndex = (int)DateTimeNow.GetDateTime().DayOfWeek;
+            var dayIndex = (int)Instance._dateTime.DayOfWeek;
             return Instance._dateTime.AddDays((dayIndex - 1) * -1);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="inOut"></param>
-        /// <returns></returns>
-        public static string GetTime(AttendanceManagement.Switch inOut)
-        {
-            return GetTime(inOut, 0, 0);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="inOut"></param>
-        /// <param name="inThreshold"></param>
-        /// <param name="outThreshold"></param>
-        /// <returns></returns>
-        public static string GetTime(AttendanceManagement.Switch inOut, int inThreshold, int outThreshold)
-        {
-            if (Instance._inputDateTime)
-            {
-                return Instance._dateTime.ToString("HH:mm:ss");
-            }
-
-            return Instance._dateTime.AddMinutes((inOut == AttendanceManagement.Switch.ClockIn) ? inThreshold : outThreshold).ToString("HH:mm:ss");
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public static DateTime GetDateTime()
-        {
-            return Instance._dateTime;
-        }
-
-        static void SetDateTime(DateTime dateTime)
-        {
-            Instance._inputDateTime = true;
-            Instance._dateTime = dateTime;
         }
     }
 }

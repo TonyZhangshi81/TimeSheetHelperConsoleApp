@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace TimeSheetHelperConsoleApp.Ext
+namespace TimeSheetHelperConsoleApp.Setting
 {
     /// <summary>
     /// 

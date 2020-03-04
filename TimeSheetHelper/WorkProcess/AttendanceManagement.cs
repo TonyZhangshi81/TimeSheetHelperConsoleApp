@@ -1,5 +1,5 @@
 ﻿using System;
-using TimeSheetHelperConsoleApp.Ext;
+using TimeSheetHelperConsoleApp.Setting;
 using TimeSheetHelperConsoleApp.Util;
 
 namespace TimeSheetHelperConsoleApp.WorkProcess
@@ -74,7 +74,7 @@ namespace TimeSheetHelperConsoleApp.WorkProcess
                 _xls.SetRangeText(string.Format("{0}{1}", COL_NAME_CLOCKOUT, DayOfWeekToRowIndex()), string.Empty);
                 return;
             }
-            _xls.SetRangeText(string.Format("{0}{1}", GetHeadColName(), DayOfWeekToRowIndex()), DateTimeNow.GetTime(_inOut, _config.Hold.In, _config.Hold.Out));
+            _xls.SetRangeText(string.Format("{0}{1}", GetHeadColName(), DayOfWeekToRowIndex()), DateTimeNow.Time);
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace TimeSheetHelperConsoleApp.WorkProcess
         /// <returns></returns>
         private int DayOfWeekToRowIndex()
         {
-            switch (DateTimeNow.GetDateTime().DayOfWeek)
+            switch (DateTimeNow.DateTime.DayOfWeek)
             {
                 case DayOfWeek.Sunday:
                     return 31;

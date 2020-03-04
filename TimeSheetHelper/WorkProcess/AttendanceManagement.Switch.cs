@@ -21,7 +21,11 @@
             /// <summary>
             /// 
             /// </summary>
-            Rest
+            Rest,
+            /// <summary>
+            /// 
+            /// </summary>
+            Default
         }
 
         /// <summary>

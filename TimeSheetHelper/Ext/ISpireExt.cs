@@ -1,4 +1,4 @@
-﻿namespace TimeSheetHelperConsoleApp.Ext
+﻿namespace TimeSheetHelperConsoleApp.Setting
 {
     /// <summary>
     /// 
