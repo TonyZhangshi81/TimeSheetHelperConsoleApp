@@ -8,7 +8,7 @@ namespace TimeSheetHelperConsoleApp.Util
     /// </summary>
     public class DateTimeNow
     {
-        private DateTime _dateTime;
+        private DateTime? _dateTime;
 
         /// <summary>
         /// Define public methods provide a global point of access, and you can also define the public property to provide a global point of access
@@ -25,13 +25,13 @@ namespace TimeSheetHelperConsoleApp.Util
         /// 
         /// </summary>
         /// <returns></returns>
-        public static string Time => Instance._dateTime.ToString("HH:mm:ss");
+        public static string Time => Instance._dateTime.Value.ToString("HH:mm:ss");
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public static DateTime DateTime => Instance._dateTime;
+        public static DateTime DateTime => Instance._dateTime.Value;
 
         /// <summary>
         /// Definition private constructor, so that the outside world cannot create the class instance
@@ -92,12 +92,11 @@ namespace TimeSheetHelperConsoleApp.Util
         /// <returns></returns>
         public static bool SetMistiming(int threshold)
         {
-            if (!SetMistiming(string.Empty))
+            if (!Instance._dateTime.HasValue)
             {
-                return false;
+                SetMistiming(string.Empty);
             }
-
-            Instance._dateTime = Instance._dateTime.AddMinutes(threshold);
+            Instance._dateTime = Instance._dateTime.Value.AddMinutes(threshold);
             return true;
         }
 
@@ -107,8 +106,8 @@ namespace TimeSheetHelperConsoleApp.Util
         /// <returns></returns>
         public static DateTime GetBeginDayofWeek()
         {
-            var dayIndex = (int)Instance._dateTime.DayOfWeek;
-            return Instance._dateTime.AddDays((dayIndex - 1) * -1);
+            var dayIndex = (int)Instance._dateTime.Value.DayOfWeek;
+            return Instance._dateTime.Value.AddDays((dayIndex - 1) * -1);
         }
     }
 }

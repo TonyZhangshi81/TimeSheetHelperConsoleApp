@@ -136,11 +136,12 @@ namespace TimeSheetHelperConsoleApp
                     return false;
                 }
             }
-
-            var threshold = (_inOut == AttendanceManagement.Switch.ClockIn) ? config.Hold.In : config.Hold.Out;
-            // set clock time
-            DateTimeNow.SetMistiming(threshold);
-
+            else
+            {
+                var threshold = (_inOut == AttendanceManagement.Switch.ClockIn) ? config.Hold.In : config.Hold.Out;
+                // set clock time
+                DateTimeNow.SetMistiming(threshold);
+            }
             return true;
         }
 
