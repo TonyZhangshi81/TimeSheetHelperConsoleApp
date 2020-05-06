@@ -9,5 +9,9 @@
     "seat": "5L49",
     "id": "18-2-0XX-0XX",
     "leader": "XXXXXX2"
+  },
+  "timespan": {
+    "begin": 421,
+    "end": 520
   }
 }

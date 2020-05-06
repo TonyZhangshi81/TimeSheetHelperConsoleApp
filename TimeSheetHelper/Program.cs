@@ -68,7 +68,7 @@ namespace TimeSheetHelperConsoleApp
             using (SpireXls xls = new SpireXls())
             {
                 var isNewFile = false;
-                var file = GetNewFileName();
+                var file = GetNewFileName(setting);
                 if (!File.Exists(file))
                 {
                     isNewFile = true;
@@ -149,11 +149,11 @@ namespace TimeSheetHelperConsoleApp
         /// 
         /// </summary>
         /// <returns></returns>
-        static private string GetNewFileName()
+        static private string GetNewFileName(SettingConfig settingConfig)
         {
-            return string.Format("{0}TimeSheet_zhangcg_{1}.xls",
+            return string.Format("{0}TimeSheet_zhangcg_{1}～{2}.xls",
                 System.Configuration.ConfigurationManager.AppSettings.Get("WorkSheet"),
-                DateTimeNow.GetBeginDayofWeek().ToString("yyyyMMdd").Substring(4, 4));
+                settingConfig.Timespan.Begin, settingConfig.Timespan.End);
         }
 
         /// <summary>

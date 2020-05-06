@@ -36,5 +36,8 @@
         /// D
         /// </summary>
         private const string COL_NAME_CLOCKOUT = "D";
+
+
+
     }
 }

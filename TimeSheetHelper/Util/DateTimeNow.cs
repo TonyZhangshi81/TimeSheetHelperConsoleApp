@@ -61,6 +61,14 @@ namespace TimeSheetHelperConsoleApp.Util
                     return false;
                 }
             }
+            else if (dateTime.Length == 12)
+            {
+                dateTime += "01";
+                if (!DateTime.TryParseExact(dateTime, "yyyyMMddHHmmss", new CultureInfo("zh-CN", true), DateTimeStyles.None, out sysDateTime))
+                {
+                    return false;
+                }
+            }
             else if (dateTime.Length == 8)
             {
                 if (!DateTime.TryParseExact(dateTime, "yyyyMMdd", new CultureInfo("zh-CN", true), DateTimeStyles.None, out sysDateTime))
@@ -70,6 +78,14 @@ namespace TimeSheetHelperConsoleApp.Util
             }
             else if (dateTime.Length == 6)
             {
+                if (!DateTime.TryParseExact(dateTime, "HHmmss", new CultureInfo("zh-CN", true), DateTimeStyles.None, out sysDateTime))
+                {
+                    return false;
+                }
+            }
+            else if (dateTime.Length == 4)
+            {
+                dateTime += "01";
                 if (!DateTime.TryParseExact(dateTime, "HHmmss", new CultureInfo("zh-CN", true), DateTimeStyles.None, out sysDateTime))
                 {
                     return false;

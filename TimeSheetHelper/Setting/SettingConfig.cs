@@ -19,6 +19,12 @@ namespace TimeSheetHelperConsoleApp.Setting
         /// </summary>
         [DataMember(Name = "content")]
         public BookContent Content { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [DataMember(Name = "timespan")]
+        public Timespan Timespan { get; set; }
     }
 
     /// <summary>
@@ -65,5 +71,18 @@ namespace TimeSheetHelperConsoleApp.Setting
         /// </summary>
         [DataMember(Name = "leader")]
         public string Leader { get; set; }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    [DataContract]
+    public class Timespan
+    {
+        [DataMember(Name = "begin")]
+        public string Begin { get; set; }
+
+        [DataMember(Name = "end")]
+        public string End { get; set; }
     }
 }

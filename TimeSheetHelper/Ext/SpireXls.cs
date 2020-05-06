@@ -106,6 +106,25 @@ namespace TimeSheetHelperConsoleApp.Setting
             this.SetRangeText(cellName, value, style);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cellName"></param>
+        public string GetRangeText(string cellName)
+        {
+            return Sheet.Range[cellName].Text;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="column"></param>
+        /// <param name="row"></param>
+        public string GetRangeText(string column, int row)
+        {
+            return Sheet.Range[string.Format("{0}{1}", column, row)].Text;
+        }
+
         #region Release resources
 
         /// <summary>
@@ -122,6 +141,27 @@ namespace TimeSheetHelperConsoleApp.Setting
             {
                 Dispose(_workBook);
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="firstColumn"></param>
+        /// <param name="lastColumn"></param>
+        /// <param name="row"></param>
+        /// <param name="colors"></param>
+        public void SetRangeKnownColor(int firstColumn, int lastColumn, int row, ExcelColors colors)
+        {
+            _workSheet.Range[row, firstColumn, row, lastColumn].Style.KnownColor = colors;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="row"></param>
+        public void DeleteRow(int row)
+        {
+            _workSheet.DeleteRow(row);
         }
 
         #endregion
