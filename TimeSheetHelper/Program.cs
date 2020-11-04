@@ -35,15 +35,48 @@ namespace TimeSheetHelperConsoleApp
         /// <summary>
         /// 
         /// </summary>
+        /// <returns></returns>
+        public static bool PrevInstance()
+        {
+            var thisProcess = System.Diagnostics.Process.GetCurrentProcess().ProcessName;
+
+            if (System.Diagnostics.Process.GetProcessesByName(thisProcess).Length > 1)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private static bool CheckParallelExecution()
+        {
+            if (PrevInstance())
+            {
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="args">
         /// [0] -> (0:ClockIn or 1:ClockOut)
         /// [1] -> (Time: 15:26:11)
         /// </param>
 		static void Main(string[] args)
         {
+            if (!CheckParallelExecution())
+            {
+                Environment.Exit(0);
+            }
+
             if (args.Count() == 0)
             {
-                // Default to the first input parameter (eg: TimeSheetHelperConsoleApp 0)
                 args = new string[1] { "0" };
             }
 
@@ -83,8 +116,10 @@ namespace TimeSheetHelperConsoleApp
                 xls.Save();
             }
 
-            Console.WriteLine(string.Format(_inOut == AttendanceManagement.Switch.Rest ? Message.I001 : Message.I002, DateTimeNow.DateTime.ToString(DATETIME_FORMAT)));
+            Console.WriteLine(string.Format(_inOut == AttendanceManagement.Switch.Rest ? Message.I001 : Message.I002, DateTimeNow.SysDateTime.ToString(DATETIME_FORMAT)));
             Console.ReadKey();
+
+            Environment.Exit(0);
         }
 
         /// <summary>
@@ -153,7 +188,7 @@ namespace TimeSheetHelperConsoleApp
         {
             return string.Format("{0}TimeSheet_zhangcg_{1}～{2}.xls",
                 System.Configuration.ConfigurationManager.AppSettings.Get("WorkSheet"),
-                settingConfig.Timespan.Begin, settingConfig.Timespan.End);
+                settingConfig.Timespan.Begin.Replace("/", string.Empty), settingConfig.Timespan.End.Replace("/", string.Empty));
         }
 
         /// <summary>

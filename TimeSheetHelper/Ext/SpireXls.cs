@@ -86,6 +86,17 @@ namespace TimeSheetHelperConsoleApp.Setting
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="column"></param>
+        /// <param name="row"></param>
+        /// 
+        public void SetRangeText(string column, int row, string value)
+        {
+            this.SetRangeText(string.Format("{0}{1}", column, row), value);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="cellName"></param>
         /// <param name="value"></param>
         /// <param name="style"></param>

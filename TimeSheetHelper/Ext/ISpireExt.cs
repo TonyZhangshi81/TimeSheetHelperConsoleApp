@@ -21,6 +21,14 @@ namespace TimeSheetHelperConsoleApp.Setting
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="column"></param>
+        /// <param name="row"></param>
+        /// <param name="value"></param>
+        void SetRangeText(string column, int row, string value);
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="cellName"></param>
         /// <param name="value"></param>
         void SetRangeText(string cellName, string value);

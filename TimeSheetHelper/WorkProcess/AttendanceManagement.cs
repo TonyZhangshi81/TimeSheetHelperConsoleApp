@@ -49,40 +49,39 @@ namespace TimeSheetHelperConsoleApp.WorkProcess
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        private bool IsHoliday(DateTime date)
+        {
+            return _config.Holiday.Days.Any(d => d.Equals(string.Format("{0}{1}", date.Month, date.Day)));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         private void CommonSetting()
         {
             if (_isNewFile)
             {
                 var index = 3;
-                var dayValue = "";
-                do
-                {
-                    var year = DateTimeNow.DateTime.Year;
-                    dayValue = _xls.GetRangeText("C", index);
+				string dayValue;
+				do
+				{
+					var year = DateTimeNow.DateTime.Year;
+					DateTime.TryParse(string.Format("{0}/{1}", year, _config.Timespan.Begin), out DateTime date);
+					date = date.AddDays(index - 3);
 
-                    if (!DateTime.TryParse(string.Format("{0}/{1}", year, dayValue), out DateTime date))
-                    {
-                        _xls.DeleteRow(index);
-                        continue;
-                    }
+					dayValue = string.Format("{0}/{1}", date.Month, date.Day);
+					_xls.SetRangeText("C", index, dayValue);
 
-                    if (DayOfWeek.Saturday == date.DayOfWeek || DayOfWeek.Sunday == date.DayOfWeek)
-                    {
-                        _xls.SetRangeKnownColor(2, 7, index, Spire.Xls.ExcelColors.Gray50Percent);
-                    }
+					if (DayOfWeek.Saturday == date.DayOfWeek || DayOfWeek.Sunday == date.DayOfWeek || this.IsHoliday(date))
+					{
+						_xls.SetRangeKnownColor(2, 8, index, Spire.Xls.ExcelColors.Gray50Percent);
+					}
 
-                    index++;
-                } while (!string.IsNullOrEmpty(dayValue));
-
-                //_xls.SetRangeText("PJ1", _config.Content.Id);
-                //_xls.SetRangeText("L4", _config.Content.Leader);
-
-                //_xls.SetRangeText("D5", _config.Content.JobNumber);
-                //_xls.SetRangeText("D6", _config.Content.Name);
-                //_xls.SetRangeText("D8", _config.Content.Seat);
-
-                //_xls.SetRangeText("D7", DateTimeNow.GetBeginDayofWeek().ToString("yyyy/MM/dd"));
-            }
+					index++;
+				} while (!_config.Timespan.End.Equals(dayValue));
+			}
         }
 
         /// <summary>
@@ -117,15 +116,29 @@ namespace TimeSheetHelperConsoleApp.WorkProcess
                 _xls.SetRangeText(string.Format("F{0}", rowIndex), DateTimeNow.Time);
 
                 var begin = _xls.GetRangeText(string.Format("B{0}", rowIndex));
+                var overtime = Convert.ToDateTime(string.Format("{0} {1}", DateTimeNow.DateTime.ToString("yyyy/MM/dd"), begin));
+
                 if (DateTimeNow.DateTime.AddHours(-9).ToString("HH:mm:ss").CompareTo(begin) > 0)
                 {
-                    var overtime = Convert.ToDateTime(string.Format("{0} {1}", DateTimeNow.DateTime.ToString("yyyy/MM/dd"), begin)).AddHours(9);
+                    overtime = overtime.AddHours(9);
 
                     TimeSpan ts = DateTimeNow.DateTime.Subtract(overtime);
                     if (ts.TotalHours >= 0.5)
                     {
                         _xls.SetRangeText(string.Format("E{0}", rowIndex), overtime.ToString("HH:mm:ss"));
                         _xls.SetRangeText(string.Format("D{0}", rowIndex), Math.Round(ts.TotalHours, 1).ToString());
+                    }
+                }
+                else
+                {
+                    TimeSpan ts = DateTimeNow.DateTime.Subtract(overtime);
+                    if (Convert.ToDateTime(begin).Hour < 12)
+                    {
+                        _xls.SetRangeText(string.Format("H{0}", rowIndex), (8 - Math.Round(ts.TotalHours - 1, 1)).ToString());
+                    }
+                    else
+                    {
+                        _xls.SetRangeText(string.Format("H{0}", rowIndex), (8 - Math.Round(ts.TotalHours, 1)).ToString());
                     }
                 }
             }

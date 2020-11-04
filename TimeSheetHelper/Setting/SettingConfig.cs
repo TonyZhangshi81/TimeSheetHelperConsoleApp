@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace TimeSheetHelperConsoleApp.Setting
 {
@@ -25,6 +26,22 @@ namespace TimeSheetHelperConsoleApp.Setting
         /// </summary>
         [DataMember(Name = "timespan")]
         public Timespan Timespan { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [DataMember(Name = "holiday")]
+        public Holiday Holiday { get; set; }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    [DataContract]
+    public class Holiday
+    {
+        [DataMember(Name = "days")]
+        public List<string> Days { get; set; }
     }
 
     /// <summary>
